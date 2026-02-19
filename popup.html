@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <style>
+    * { box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      width: 220px;
-      padding: 16px;
+      width: 240px;
+      padding: 14px;
       margin: 0;
       background: #1a1a2e;
       color: #e0e0e0;
@@ -15,17 +16,61 @@
       font-size: 14px;
       margin: 0 0 12px;
       color: #fff;
-      letter-spacing: 0.5px;
     }
-    p {
+
+    /* 语言选择区域 */
+    .section-title {
+      font-size: 11px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin: 0 0 6px;
+    }
+    #langList {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 12px;
+      min-height: 24px;
+    }
+    .lang-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 8px;
+      border-radius: 5px;
+      background: #252545;
+      cursor: pointer;
+      user-select: none;
+    }
+    .lang-item:hover { background: #2e2e58; }
+    .lang-item input[type="checkbox"] {
+      accent-color: #0056d2;
+      width: 14px;
+      height: 14px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .lang-label {
       font-size: 12px;
-      color: #aaa;
-      margin: 0 0 14px;
+      flex: 1;
+    }
+    .lang-code {
+      font-size: 10px;
+      color: #666;
+      font-family: monospace;
+    }
+    .hint {
+      font-size: 11px;
+      color: #666;
+      margin: 0 0 12px;
       line-height: 1.5;
     }
+
+    /* 按钮 */
     button {
       width: 100%;
-      padding: 9px 0;
+      padding: 8px 0;
       border: none;
       border-radius: 6px;
       background: #0056d2;
@@ -34,26 +79,36 @@
       cursor: pointer;
       transition: background 0.2s;
     }
-    button:hover {
-      background: #0041a8;
-    }
+    button:hover { background: #0041a8; }
+    button:disabled { background: #333; color: #666; cursor: default; }
+
     #status {
-      margin-top: 10px;
+      margin-top: 8px;
       font-size: 12px;
       text-align: center;
-      min-height: 18px;
+      min-height: 16px;
       color: #4caf50;
     }
-    #status.error {
-      color: #f44336;
+    #status.error { color: #f44336; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #2a2a4a;
+      margin: 12px 0;
     }
   </style>
 </head>
 <body>
   <h2>Coursera 双语字幕</h2>
-  <p>自动显示中文 + 英文字幕。<br>若字幕未生效，点击下方按钮手动触发。</p>
-  <button id="applyBtn">立即开启双语字幕</button>
+
+  <div class="section-title">显示的字幕语言</div>
+  <div id="langList"><span class="hint">正在读取字幕轨道…</span></div>
+  <p class="hint" id="hint">勾选后立即生效，设置自动保存。</p>
+
+  <hr class="divider" />
+  <button id="applyBtn">手动重新应用</button>
   <div id="status"></div>
+
   <script src="popup.js"></script>
 </body>
 </html>
