@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Coursera 双语字幕",
+  "version": "1.0",
+  "description": "在 Coursera 视频中同时显示中文和英文字幕",
+  "permissions": ["activeTab", "storage"],
+  "host_permissions": ["https://www.coursera.org/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://www.coursera.org/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
