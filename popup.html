@@ -40,10 +40,8 @@
       padding: 5px 8px;
       border-radius: 5px;
       background: #252545;
-      cursor: pointer;
       user-select: none;
     }
-    .lang-item:hover { background: #2e2e58; }
     .lang-item input[type="checkbox"] {
       accent-color: #0056d2;
       width: 14px;
@@ -60,6 +58,39 @@
       color: #666;
       font-family: monospace;
     }
+    /* 行序标记 */
+    .line-badge {
+      font-size: 10px;
+      color: #888;
+      min-width: 32px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .lang-item.checked .line-badge { color: #0056d2; }
+    /* 排序按钮 */
+    .sort-btns {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      flex-shrink: 0;
+    }
+    .sort-btn {
+      width: 16px;
+      height: 12px;
+      border: none;
+      border-radius: 2px;
+      background: #333;
+      color: #aaa;
+      font-size: 8px;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+    .sort-btn:hover:not(:disabled) { background: #0056d2; color: #fff; }
+    .sort-btn:disabled { opacity: 0.25; cursor: default; }
     .hint {
       font-size: 11px;
       color: #666;
@@ -103,7 +134,7 @@
 
   <div class="section-title">显示的字幕语言</div>
   <div id="langList"><span class="hint">正在读取字幕轨道…</span></div>
-  <p class="hint" id="hint">勾选后立即生效，设置自动保存。</p>
+  <p class="hint">上下拖拽顺序 = 字幕显示行序（第1行在上，最后一行在下）。</p>
 
   <hr class="divider" />
   <button id="applyBtn">手动重新应用</button>

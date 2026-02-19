@@ -5,14 +5,10 @@ let targetLangs = DEFAULT_LANGS;
 let watchedVideo = null;
 let lastUrl = location.href;
 
-// 从 storage 加载语言配置
 chrome.storage.sync.get("selectedLangs", (result) => {
-  if (result.selectedLangs?.length > 0) {
-    targetLangs = result.selectedLangs;
-  }
+  if (result.selectedLangs?.length > 0) targetLangs = result.selectedLangs;
 });
 
-// storage 变化时实时更新并重新应用
 chrome.storage.onChanged.addListener((changes) => {
   if (changes.selectedLangs) {
     targetLangs = changes.selectedLangs.newValue ?? DEFAULT_LANGS;
@@ -21,6 +17,40 @@ chrome.storage.onChanged.addListener((changes) => {
   }
 });
 
+// 根据语言在 targetLangs 中的顺序，给该轨道的所有 cue 设置 line 值
+// targetLangs[0] 显示在最上方，targetLangs[最后] 显示在最下方（-1）
+function applyLineToTrack(track) {
+  const orderIndex = targetLangs.indexOf(track.language);
+  if (orderIndex === -1 || targetLangs.length <= 1) return;
+
+  // index 0 → line -(n), 最后一个 → line -1
+  const linePos = -(targetLangs.length - orderIndex);
+
+  function setLine(cue) {
+    cue.snapToLines = true;
+    cue.line = linePos;
+  }
+
+  // 已加载的全部 cue
+  if (track.cues) {
+    for (const cue of track.cues) setLine(cue);
+  }
+
+  // 后续激活的 cue（VTT 文件异步加载，或 seek 时）
+  track.oncuechange = () => {
+    if (track.activeCues) {
+      for (const cue of track.activeCues) setLine(cue);
+    }
+  };
+
+  // VTT 文件加载完成后批量处理
+  track.addEventListener("load", () => {
+    if (track.cues) {
+      for (const cue of track.cues) setLine(cue);
+    }
+  });
+}
+
 function applyTracks(video) {
   if (!video || video.textTracks.length === 0) return false;
   let success = false;
@@ -28,6 +58,7 @@ function applyTracks(video) {
     const track = video.textTracks[i];
     if (targetLangs.includes(track.language)) {
       track.mode = "showing";
+      applyLineToTrack(track);
       success = true;
     } else {
       track.mode = "hidden";
@@ -89,7 +120,6 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     const tracks = [];
     for (let i = 0; i < video.textTracks.length; i++) {
       const t = video.textTracks[i];
-      // 只取字幕类型（subtitles / captions）
       if (t.kind === "subtitles" || t.kind === "captions") {
         tracks.push({ language: t.language, label: t.label });
       }
