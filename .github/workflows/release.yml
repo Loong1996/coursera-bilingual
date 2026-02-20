@@ -1,0 +1,44 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get version from tag
+        id: version
+        run: echo "version=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+
+      - name: Package extension
+        run: |
+          zip -r coursera-bilingual-${{ steps.version.outputs.version }}.zip \
+            manifest.json \
+            content.js \
+            popup.html \
+            popup.js \
+            icons/ \
+            assets/ \
+            --exclude "*.DS_Store"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: v${{ steps.version.outputs.version }}
+          body: |
+            ## 安装方法
+
+            1. 下载下方的 `coursera-bilingual-${{ steps.version.outputs.version }}.zip`
+            2. 解压到本地任意目录
+            3. 打开 Chrome → `chrome://extensions/` → 开启开发者模式
+            4. 点击「加载已解压的扩展程序」，选择解压后的文件夹
+          files: coursera-bilingual-${{ steps.version.outputs.version }}.zip
