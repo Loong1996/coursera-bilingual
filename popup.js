@@ -161,7 +161,9 @@ chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     const savedLangs = result.selectedLangs ?? DEFAULT_LANGS;
 
     chrome.tabs.sendMessage(tabId, { action: "getTracks" }, (resp) => {
-      const tracks = resp?.tracks ?? [];
+      // 必须读取 lastError，否则 Chrome 会抛 Unchecked runtime.lastError 警告
+      const connError = chrome.runtime.lastError;
+      const tracks = (!connError && resp?.tracks) ? resp.tracks : [];
 
       // 构建 allItems：先按 savedLangs 顺序放勾选项，再补充视频里有但未选的
       const savedSet = new Set(savedLangs);
@@ -194,6 +196,10 @@ chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
 
       orderedLangs = [...savedLangs];
       renderList(allItems, tabId);
+
+      if (connError) {
+        setStatus("页面未就绪，请刷新后重试", true);
+      }
     });
   });
 
