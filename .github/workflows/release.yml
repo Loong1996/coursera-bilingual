@@ -26,6 +26,7 @@ jobs:
             content.js \
             popup.html \
             popup.js \
+            LICENSE \
             icons/ \
             assets/ \
             --exclude "*.DS_Store"
