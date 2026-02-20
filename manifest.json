@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Coursera 双语字幕",
-  "version": "1.0",
+  "version": "1.1",
   "description": "在 Coursera 视频中同时显示中文和英文字幕",
   "permissions": ["activeTab", "storage"],
   "host_permissions": ["https://www.coursera.org/*"],
