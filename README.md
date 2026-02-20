@@ -2,6 +2,8 @@
 
 在 Coursera 视频中同时叠加显示多种语言字幕的 Chrome 扩展，支持自定义语言组合与显示顺序。
 
+English version: [README_EN.md](README_EN.md)
+
 ## 功能
 
 - **自动开启**：进入 Coursera 视频页面时自动激活所选语言字幕
@@ -46,5 +48,12 @@
 ├── content.js      # 注入页面的核心脚本
 ├── popup.html      # 点击图标时的弹窗界面
 ├── popup.js        # 弹窗交互逻辑
+├── assets/         # 静态资源
 └── icons/          # 扩展图标
 ```
+
+## 赞赏
+
+如果这个扩展对你有帮助，欢迎请我喝杯咖啡 ☕
+
+<img src="assets/appreciate.jpg" alt="微信赞赏码" width="200" />
